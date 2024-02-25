@@ -12,6 +12,7 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         String name = sc.nextLine();
+
         InetAddress address = InetAddress.getLocalHost();
         Socket socket = new Socket(address, 3500);
         Client client = new Client(socket, name);
@@ -24,6 +25,6 @@ public class Main {
         System.out.println("LocalPort: " + socket.getLocalPort());
 
         client.listenForMessage();
-
+        client.sendMessage();
     }
 }

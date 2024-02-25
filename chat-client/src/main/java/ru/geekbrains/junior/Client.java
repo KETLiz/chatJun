@@ -2,6 +2,7 @@ package ru.geekbrains.junior;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
     private final Socket socket;
@@ -32,7 +33,6 @@ public class Client {
                     } catch(Exception e) {
                         closeEverything(socket, bufferedWriter, bufferedReader);
                     }
-
                 }
             }
         }).start();
@@ -40,7 +40,19 @@ public class Client {
 
     public void sendMessage() {
         try {
+            bufferedWriter.write(name);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
 
+            Scanner sc = new Scanner(System.in);
+            while(!socket.isClosed()) {
+                String message = sc.nextLine();
+                bufferedWriter.write(name + ": " + message);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
+            }
+        } catch (IOException e) {
+            closeEverything(socket, bufferedWriter, bufferedReader);
         }
     }
 

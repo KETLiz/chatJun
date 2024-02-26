@@ -1,5 +1,6 @@
 package ru.geekbrains.junior;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -10,7 +11,7 @@ public class Server {
         this.serverSocket = serverSocket;
     }
 
-    public void runServer() {
+    public void runServer() throws IOException {
         while(!serverSocket.isClosed()) {
             Socket socket = serverSocket.accept();
             System.out.println("Подключился новый клиент!");

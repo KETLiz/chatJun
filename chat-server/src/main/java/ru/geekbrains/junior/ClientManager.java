@@ -77,14 +77,33 @@ public class ClientManager implements Runnable{
                     missingSymbol = String.valueOf(missingNameWithSymbol.charAt(0));
                 }
                 if(missingSymbol.equals("@")) {
-                        String missingName = missingNameWithSymbol.substring(1);
-                        for(ClientManager client : clients) {
-                            if(client.name.equals(missingName)) {
-                                client.bufferedWriter.write(messageFromClient);
-                                client.bufferedWriter.newLine();
-                                client.bufferedWriter.flush();
-                            }
-                        }
+                    String missingName = missingNameWithSymbol.substring(1);
+                    ClientManager missingClient = findClientByName(missingName);
+                    if(missingClient != null) {
+                        missingClient.bufferedWriter.write(messageFromClient);
+                        missingClient.bufferedWriter.newLine();
+                        missingClient.bufferedWriter.flush();
+                    } else {
+                        this.bufferedWriter.write("Пользователь с таким именем не найден. Сообщение не отправлено");
+                        this.bufferedWriter.newLine();
+                        this.bufferedWriter.flush();
+                    }
+
+//                        int i = 0;
+//                        while(i < clients.size()) {
+//                            if(clients.get(i).name.equals(missingName)) {
+//                                clients.get(i).bufferedWriter.write(messageFromClient);
+//                                clients.get(i).bufferedWriter.newLine();
+//                                clients.get(i).bufferedWriter.flush();
+//                            }
+//                        }
+//                        for(ClientManager client : clients) {
+//                            if(client.name.equals(missingName)) {
+//                                client.bufferedWriter.write(messageFromClient);
+//                                client.bufferedWriter.newLine();
+//                                client.bufferedWriter.flush();
+//                            }
+//                        }
                 } else {
                         broadCastMessage(messageFromClient);
                     }
@@ -92,5 +111,14 @@ public class ClientManager implements Runnable{
                 closeEverything(socket, bufferedWriter, bufferedReader);
             }
         }
+    }
+
+    private ClientManager findClientByName(String missingName) {
+        for(ClientManager client : clients) {
+            if(client.name.equals(missingName)) {
+                return client;
+            }
+        }
+        return null;
     }
 }

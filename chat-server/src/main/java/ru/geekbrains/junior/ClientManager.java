@@ -88,22 +88,6 @@ public class ClientManager implements Runnable{
                         this.bufferedWriter.newLine();
                         this.bufferedWriter.flush();
                     }
-
-//                        int i = 0;
-//                        while(i < clients.size()) {
-//                            if(clients.get(i).name.equals(missingName)) {
-//                                clients.get(i).bufferedWriter.write(messageFromClient);
-//                                clients.get(i).bufferedWriter.newLine();
-//                                clients.get(i).bufferedWriter.flush();
-//                            }
-//                        }
-//                        for(ClientManager client : clients) {
-//                            if(client.name.equals(missingName)) {
-//                                client.bufferedWriter.write(messageFromClient);
-//                                client.bufferedWriter.newLine();
-//                                client.bufferedWriter.flush();
-//                            }
-//                        }
                 } else {
                         broadCastMessage(messageFromClient);
                     }

@@ -51,7 +51,7 @@ public class ClientManager implements Runnable{
     private void broadCastMessage(String message) {
         for(ClientManager client : clients) {
             try {
-                if(!client.name.equals(this.name) && message!=null) {
+                if(!client.equals(this) && message!=null) {
                     client.bufferedWriter.write(message);
                     client.bufferedWriter.newLine();
                     client.bufferedWriter.flush();
@@ -68,8 +68,27 @@ public class ClientManager implements Runnable{
         while(!socket.isClosed()) {
             try {
                 messageFromClient = bufferedReader.readLine();
-                broadCastMessage(messageFromClient);
-            } catch (Exception e) {
+
+                String[] message = messageFromClient.split(" ");
+                String missingNameWithSymbol = null;
+                String missingSymbol = null;
+                for(int i = 0; i < message.length; i++) {
+                    missingNameWithSymbol = message[1];
+                    missingSymbol = String.valueOf(missingNameWithSymbol.charAt(0));
+                }
+                if(missingSymbol.equals("@")) {
+                        String missingName = missingNameWithSymbol.substring(1);
+                        for(ClientManager client : clients) {
+                            if(client.name.equals(missingName)) {
+                                client.bufferedWriter.write(messageFromClient);
+                                client.bufferedWriter.newLine();
+                                client.bufferedWriter.flush();
+                            }
+                        }
+                } else {
+                        broadCastMessage(messageFromClient);
+                    }
+            } catch (IOException e) {
                 closeEverything(socket, bufferedWriter, bufferedReader);
             }
         }
